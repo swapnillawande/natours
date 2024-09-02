@@ -1,11 +1,16 @@
 const fs = require('fs');
 const express = require('express');
+const morgan = require('morgan');
 const app = express();
 
+
+// 1) Middle-Ware
 app.use(express.json());
+app.use(morgan('dev'));
+
 
 app.use((req, res, next)=>{
-    console.log("Hello from the middleware 😘");
+    console.log("Hello from the middleware ");
     next();
 })
 
@@ -16,6 +21,7 @@ app.use((req,res,next)=>{
 
 const toursData = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`));
 
+// 2) route handlers
 const getAllTours = (req,res) =>{
         res.status(200).json({
             status: "success",
@@ -96,6 +102,27 @@ const deleteTourById = (req,res)=>{
 }
 
 
+const getAllUsers = (req,res) =>{
+
+}
+
+const createUser = (req,res) => {
+
+}
+
+const getUserById = (req,res) => {
+
+}
+
+const updateUserById = (req,res) =>{
+
+}
+
+const deleteUserById = (req,res) => {
+
+}
+
+
 // fetch all the tours data by : GET API
 //app.get('/api/v1/tours',getAllTours);
 
@@ -111,16 +138,35 @@ const deleteTourById = (req,res)=>{
 // delete tour by ID : DELETE
 //app.delete('/api/v1/tours/:id',deleteTourById);
 
-app.route('/api/v1/tours')
+// 3) ROUTES
+const tourRouter = express.Router();
+const userRouter = express.Router();
+
+app.use('/api/v1/tours',tourRouter);
+app.use('/api/v1/users',userRouter);
+
+
+
+tourRouter.route('/')
     .get(getAllTours)
     .post(createTour);
 
-app.route('/api/v1/tours/:id')
+tourRouter.route('/:id')
     .get(getTourById)
     .patch(updateTourById)
     .delete(deleteTourById);
 
+userRouter.route('/')
+    .get(getAllUsers)
+    .post(createUser);
 
+
+userRouter.route('/:id')
+    .get(getUserById)
+    .patch(updateUserById)
+    .delete(deleteUserById);
+
+// 4) start server
 const port = 3000;
 app.listen(port, () => {
     console.log(`App Natours running on port: ${port}`);
