@@ -4,11 +4,13 @@
   "description": "Learing node, express js, mongodb",
   "main": "app.js",
   "scripts": {
-    "start": "npx nodemon server.js"
+    "start:dev": "npx nodemon server.js",
+    "start:prod": "NODE_ENV=production npx nodemon server.js"
   },
   "author": "Swapnil Lawande",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "morgan": "^1.10.0"
   }
